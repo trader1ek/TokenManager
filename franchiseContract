@@ -1,0 +1,45 @@
+pragma solidity ^0.8.0;
+
+contract TokenManager {
+    address private owner;
+    ERC20[] private erc20Contracts;
+    ERC721[] private erc721Contracts;
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    function addERC20Contract(ERC20 _contract) public {
+        require(msg.sender == owner, "Only the owner can add contracts");
+        erc20Contracts.push(_contract);
+    }
+
+    function addERC721Contract(ERC721 _contract) public {
+        require(msg.sender == owner, "Only the owner can add contracts");
+        erc721Contracts.push(_contract);
+    }
+
+    function mintERC20(uint256 _contractIndex, address _to, uint256 _amount) public {
+        require(msg.sender == owner, "Only the owner can mint tokens");
+        ERC20 _contract = erc20Contracts[_contractIndex];
+        _contract.mint(_to, _amount);
+    }
+
+    function burnERC20(uint256 _contractIndex, address _from, uint256 _amount) public {
+        require(msg.sender == owner, "Only the owner can burn tokens");
+        ERC20 _contract = erc20Contracts[_contractIndex];
+        _contract.burn(_from, _amount);
+    }
+
+    function mintERC721(uint256 _contractIndex, address _to, uint256 _tokenId) public {
+        require(msg.sender == owner, "Only the owner can mint tokens");
+        ERC721 _contract = erc721Contracts[_contractIndex];
+        _contract.mint(_to, _tokenId);
+    }
+
+    function burnERC721(uint256 _contractIndex, uint256 _tokenId) public {
+        require(msg.sender == owner, "Only the owner can burn tokens");
+        ERC721 _contract = erc721Contracts[_contractIndex];
+        _contract.burn(_tokenId);
+    }
+}
